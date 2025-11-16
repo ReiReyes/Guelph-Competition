@@ -1,355 +1,219 @@
-import java.io.*;
+import java.time.LocalTime;
 import java.util.*;
 
+/**
+ * GTFS-based bus simulation engine.
+ */
 public class BusStops {
-    
-    // Data structures for bus system
-    private Map<String, Route> routes;
-    private Map<Integer, Stop> stops;
-    private List<Bus> buses;
-    
+
+    private final Map<String, Route> routes;
+    private final Map<String, Stop> stops;
+    private final List<Bus> buses;
+
     public BusStops() {
-        routes = new HashMap<>();
-        stops = new HashMap<>();
+
+        // Load routes
+        RouteLoader routeLoader = new RouteLoader();
+        routeLoader.loadRoutes("csv_files/routes.csv");
+        routes = routeLoader.getRoutes();
+
+        // Load stops
+        StopLoader stopLoader = new StopLoader();
+        stopLoader.loadStops("csv_files/stops.csv");
+        stops = stopLoader.getAllStops();
+
+        // Load stop_times and create buses
         buses = new ArrayList<>();
-        loadData();
+        loadStopTimes("csv_files/stop_times.csv");
     }
-    
+
     /**
-     * Load routes and stops data from CSV files
-     */
-    private void loadData() {
-        loadRoutes(".csv files/routes.csv");
-        loadStops(".csv files/stops.csv");
-        loadStopTimes(".csv files/stop_times.csv");
-    }
-    
-    /**
-     * Load routes from routes.csv
-     */
-    private void loadRoutes(String filename) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            boolean header = true;
-            
-            while ((line = br.readLine()) != null) {
-                if (header) {
-                    header = false;
-                    continue;
-                }
-                
-                String[] parts = parseCSV(line);
-                if (parts.length >= 4) {
-                    String routeId = parts[0];
-                    String routeName = parts[2];
-                    String routeLongName = parts[3];
-                    String color = parts[7];
-                    
-                    Route route = new Route(routeId, routeName, routeLongName, color);
-                    routes.put(routeId, route);
-                }
-            }
-            System.out.println("Loaded " + routes.size() + " routes");
-        } catch (IOException e) {
-            System.err.println("Error loading routes: " + e.getMessage());
-        }
-    }
-    
-    /**
-     * Load stops from stops.csv
-     */
-    private void loadStops(String filename) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            boolean header = true;
-            
-            while ((line = br.readLine()) != null) {
-                if (header) {
-                    header = false;
-                    continue;
-                }
-                
-                String[] parts = parseCSV(line);
-                if (parts.length >= 6) {
-                    int stopId = Integer.parseInt(parts[0]);
-                    String stopName = parts[2];
-                    double latitude = Double.parseDouble(parts[4]);
-                    double longitude = Double.parseDouble(parts[5]);
-                    
-                    Stop stop = new Stop(stopId, stopName, latitude, longitude);
-                    stops.put(stopId, stop);
-                }
-            }
-            System.out.println("Loaded " + stops.size() + " stops");
-        } catch (IOException e) {
-            System.err.println("Error loading stops: " + e.getMessage());
-        }
-    }
-    
-    /**
-     * Load stop times and create buses with routes
+     * Load stop_times.csv and create up to 100 buses
      */
     private void loadStopTimes(String filename) {
-        Map<String, List<StopTime>> tripStops = new HashMap<>();
-        
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            boolean header = true;
-            
-            while ((line = br.readLine()) != null) {
-                if (header) {
-                    header = false;
-                    continue;
-                }
-                
-                String[] parts = parseCSV(line);
-                if (parts.length >= 5) {
-                    String tripId = parts[0];
-                    String arrivalTime = parts[1];
-                    String departureTime = parts[2];
-                    int stopId = Integer.parseInt(parts[3]);
-                    int stopSequence = Integer.parseInt(parts[4]);
-                    
-                    StopTime stopTime = new StopTime(tripId, arrivalTime, departureTime, stopId, stopSequence);
-                    tripStops.computeIfAbsent(tripId, k -> new ArrayList<>()).add(stopTime);
-                }
+        Stop_timesLoader loader = new Stop_timesLoader();
+        loader.loadStop_times(filename);
+        Map<String, List<Stop_times>> tripStops = loader.getAllStop_times();
+
+        int busCount = 0;
+        for (Map.Entry<String, List<Stop_times>> entry : tripStops.entrySet()) {
+            if (busCount >= 100) break;
+
+            List<StopTime> route = new ArrayList<>();
+            for (Stop_times st : entry.getValue()) {
+                route.add(new StopTime(
+                        st.getTripId(),
+                        st.getArrivalTime(),
+                        st.getDepartureTime(),
+                        st.getStopId(),
+                        st.getStopSequence()
+                ));
             }
-            
-            System.out.println("Loaded " + tripStops.size() + " trips");
-            
-            // Create buses for each unique trip (limited to prevent memory issues)
-            int busCount = 0;
-            for (Map.Entry<String, List<StopTime>> entry : tripStops.entrySet()) {
-                if (busCount >= 100) break; // Limit to 100 buses for demo
-                
-                List<StopTime> stopTimes = entry.getValue();
-                Collections.sort(stopTimes);
-                
-                Bus bus = new Bus("BUS_" + busCount, stopTimes);
-                buses.add(bus);
-                busCount++;
-            }
-            
-            System.out.println("Created " + buses.size() + " buses for simulation");
-        } catch (IOException e) {
-            System.err.println("Error loading stop times: " + e.getMessage());
+
+            // Ensure correct ordering
+            route.sort(Comparator.naturalOrder());
+
+            buses.add(new Bus("BUS_" + busCount, route));
+            busCount++;
         }
+
+        System.out.println("Created " + buses.size() + " buses for simulation");
     }
-    
+
     /**
-     * Simulate buses moving through stops at a given time
+     * Show buses currently at a stop
      */
     public void simulateAtTime(String timeStr) {
         System.out.println("\n=== Bus Simulation at " + timeStr + " ===");
-        
-        int busesAtStops = 0;
+        int active = 0;
+
         for (Bus bus : buses) {
-            Stop currentStop = bus.getStopAtTime(timeStr, stops);
-            if (currentStop != null) {
-                System.out.println(bus.getId() + " at " + currentStop.getName());
-                busesAtStops++;
+            Stop stop = bus.getStopAtTime(timeStr, stops);
+            if (stop != null) {
+                System.out.println(bus.getId() + " at " + stop.getStopName());
+                active++;
             }
         }
-        System.out.println("Total buses active: " + busesAtStops);
+
+        System.out.println("Total buses active: " + active);
     }
-    
+
     /**
-     * Get all buses on a specific route
+     * Show route metadata
      */
-    public void showBusesOnRoute(String routeName) {
-        System.out.println("\n=== Buses on Route: " + routeName + " ===");
-        
+    public void showBusesOnRoute(String routeShortName) {
+        System.out.println("\n=== Buses on Route: " + routeShortName + " ===");
+
         Route route = routes.values().stream()
-            .filter(r -> r.getShortName().equals(routeName))
-            .findFirst()
-            .orElse(null);
-            
+                .filter(r -> r.getShortName() != null &&
+                             r.getShortName().equals(routeShortName))
+                .findFirst()
+                .orElse(null);
+
         if (route != null) {
             System.out.println("Route: " + route.getLongName());
-            System.out.println("Color: #" + route.getColor());
+            System.out.println("Color: #" + route.getRouteColor());
         } else {
             System.out.println("Route not found");
         }
     }
-    
+
     /**
-     * Show information about stops near a location
+     * Show stops near (lat, lon) within radius
      */
-    public void showNearbyStops(double latitude, double longitude, double radiusKm) {
+    public void showNearbyStops(double lat, double lon, double radiusKm) {
         System.out.println("\n=== Stops within " + radiusKm + " km ===");
-        
         int count = 0;
+
         for (Stop stop : stops.values()) {
-            double distance = calculateDistance(latitude, longitude, stop.getLatitude(), stop.getLongitude());
-            if (distance <= radiusKm) {
-                System.out.println(stop.getName() + " (" + String.format("%.2f", distance) + " km)");
+            double dist = calculateDistance(lat, lon, stop.getStopLat(), stop.getStopLon());
+            if (dist <= radiusKm) {
+                System.out.println(stop.getStopName() + " (" + String.format("%.2f", dist) + " km)");
                 count++;
             }
         }
+
         System.out.println("Found " + count + " stops");
     }
-    
+
     /**
-     * Calculate distance between two coordinates in km
+     * Haversine formula
      */
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-        final int R = 6371; // Earth radius in km
+        final int R = 6371;
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                   Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-                   Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
-    
-    /**
-     * Parse CSV line handling quoted fields
-     */
-    private String[] parseCSV(String line) {
-        List<String> result = new ArrayList<>();
-        StringBuilder current = new StringBuilder();
-        boolean inQuotes = false;
-        
-        for (int i = 0; i < line.length(); i++) {
-            char c = line.charAt(i);
-            
-            if (c == '"') {
-                inQuotes = !inQuotes;
-            } else if (c == ',' && !inQuotes) {
-                result.add(current.toString().trim());
-                current = new StringBuilder();
-            } else {
-                current.append(c);
-            }
-        }
-        result.add(current.toString().trim());
-        
-        return result.toArray(new String[0]);
-    }
-    
-    // Inner classes
-    
-    /**
-     * Represents a bus route
-     */
-    private static class Route {
-        private String id;
-        private String shortName;
-        private String longName;
-        private String color;
-        
-        Route(String id, String shortName, String longName, String color) {
-            this.id = id;
-            this.shortName = shortName;
-            this.longName = longName;
-            this.color = color;
-        }
-        
-        String getId() { return id; }
-        String getShortName() { return shortName; }
-        String getLongName() { return longName; }
-        String getColor() { return color; }
-    }
-    
-    /**
-     * Represents a bus stop
-     */
-    public static class Stop {
-        private int id;
-        private String name;
-        private double latitude;
-        private double longitude;
-        
-        Stop(int id, String name, double latitude, double longitude) {
-            this.id = id;
-            this.name = name;
-            this.latitude = latitude;
-            this.longitude = longitude;
-        }
-        
-        int getId() { return id; }
-        String getName() { return name; }
-        double getLatitude() { return latitude; }
-        double getLongitude() { return longitude; }
-    }
-    
-    /**
-     * Represents a stop time for a trip
-     */
+
+    // ==========================================================
+    // === Inner Classes ========================================
+    // ==========================================================
+
     private static class StopTime implements Comparable<StopTime> {
-        private String tripId;
-        private String arrivalTime;
-        private String departureTime;
-        private int stopId;
-        private int stopSequence;
-        
-        StopTime(String tripId, String arrivalTime, String departureTime, int stopId, int stopSequence) {
+        private final String tripId;
+        private final String arrivalTime;
+        private final String departureTime;
+        private final String stopId;
+        private final int stopSequence;
+
+        StopTime(String tripId, String arrivalTime, String departureTime,
+                 String stopId, int stopSequence) {
             this.tripId = tripId;
             this.arrivalTime = arrivalTime;
             this.departureTime = departureTime;
             this.stopId = stopId;
             this.stopSequence = stopSequence;
         }
-        
+
         @Override
         public int compareTo(StopTime other) {
             return Integer.compare(this.stopSequence, other.stopSequence);
         }
-        
-        String getArrivalTime() { return arrivalTime; }
-        String getDepartureTime() { return departureTime; }
-        int getStopId() { return stopId; }
+
+        public String getArrivalTime() { return arrivalTime; }
+        public String getDepartureTime() { return departureTime; }
+        public String getStopId() { return stopId; }
     }
-    
-    /**
-     * Represents a bus in the simulation
-     */
+
+    // ==========================================================
+    // === Bus class with GTFS-safe time parsing ================
+    // ==========================================================
+
     private static class Bus {
-        private String id;
-        private List<StopTime> route;
-        
+        private final String id;
+        private final List<StopTime> route;
+
         Bus(String id, List<StopTime> route) {
             this.id = id;
             this.route = route;
         }
-        
-        String getId() { return id; }
-        
+
+        public String getId() { return id; }
+
         /**
-         * Get the stop where this bus is at a given time
+         * GTFS-safe time parser:
+         *  Supports:
+         *    - "9:45:00"
+         *    - "07:12:30"
+         *    - "24:10:00"
+         *    - "26:25:30"
          */
-        Stop getStopAtTime(String timeStr, Map<Integer, Stop> stops) {
+        private LocalTime parseGtfsTime(String t) {
+            if (t == null || t.isEmpty()) return null;
+
+            String[] p = t.split(":");
+            if (p.length < 3) return null;
+
+            int hour = Integer.parseInt(p[0]);   // 0–99 allowed
+            int min  = Integer.parseInt(p[1]);
+            int sec  = Integer.parseInt(p[2]);
+
+            // LocalTime supports 0–23; wrap anything above
+            hour = hour % 24;
+
+            return LocalTime.of(hour, min, sec);
+        }
+
+        public Stop getStopAtTime(String timeStr, Map<String, Stop> stops) {
+            LocalTime check = parseGtfsTime(timeStr);
+            if (check == null) return null;
+
             for (StopTime st : route) {
-                if (isTimeBetween(timeStr, st.getArrivalTime(), st.getDepartureTime())) {
+                LocalTime arrival = parseGtfsTime(st.getArrivalTime());
+                LocalTime departure = parseGtfsTime(st.getDepartureTime());
+
+                if (arrival == null || departure == null) continue;
+
+                // check ∈ [arrival, departure]
+                if (!check.isBefore(arrival) && !check.isAfter(departure)) {
                     return stops.get(st.getStopId());
                 }
             }
             return null;
         }
-        
-        /**
-         * Check if a time falls between arrival and departure
-         */
-        private boolean isTimeBetween(String checkTime, String arrival, String departure) {
-            return checkTime.compareTo(arrival) >= 0 && checkTime.compareTo(departure) <= 0;
-        }
-    }
-    
-    // Main method for testing
-    public static void main(String[] args) {
-        BusStops simulator = new BusStops();
-        
-        // Simulate buses at specific times
-        simulator.simulateAtTime("12:30:00");
-        simulator.simulateAtTime("14:00:00");
-        simulator.simulateAtTime("16:30:00");
-        
-        // Show route information
-        simulator.showBusesOnRoute("1");
-        simulator.showBusesOnRoute("10");
-        
-        // Show nearby stops (near downtown Guelph coordinates)
-        simulator.showNearbyStops(43.545, -80.245, 0.5);
     }
 }
