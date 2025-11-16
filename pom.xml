@@ -12,30 +12,26 @@
     <packaging>jar</packaging>
 
     <name>Guelph Competition</name>
-    <description>GEC 2025 Competition Code</description>
 
     <properties>
-        <!-- MATCHES your installed Java version -->
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-
-        <!-- JSON library for Overpass API -->
+        <!-- JSON for Overpass API output -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20231013</version>
         </dependency>
-
     </dependencies>
 
     <build>
         <plugins>
 
-            <!-- Java Compiler Plugin -->
+            <!-- Compile Java -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -46,13 +42,30 @@
                 </configuration>
             </plugin>
 
-            <!-- Allows: mvn exec:java -Dexec.mainClass=Main -->
+            <!-- Run Java -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
                     <mainClass>Main</mainClass>
+                </configuration>
+            </plugin>
+
+            <!-- Host the website -->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>11.0.14</version>
+                <configuration>
+                    <webApp>
+                        <resourceBases>
+                            <resourceBase>${project.basedir}/src/main/resources/public</resourceBase>
+                        </resourceBases>
+                    </webApp>
+                    <httpConnector>
+                        <port>8080</port>
+                    </httpConnector>
                 </configuration>
             </plugin>
 
