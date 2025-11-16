@@ -1,9 +1,9 @@
 public class Stop_times {
-    private  String tripId;
-    private  String arrivalTime;
-    private  String departureTime;
-    private  String stopId;
-    private  int stopSequence;
+    private String tripId;
+    private String arrivalTime;
+    private String departureTime;
+    private String stopId;
+    private int stopSequence;
     private int stopHeadsign;
     private int pickupType;
     private int dropOffType;
@@ -24,14 +24,14 @@ public class Stop_times {
         this.timepoint = timepoint;
     }
 
-    public String getTripId() { return this.tripId; }
-    public String getArrivalTime() { return this.arrivalTime; }
-    public String getDepartureTime() { return this.departureTime; }
-    public String getStopId() { return this.stopId; }
-    public int getStopSequence() { return this.stopSequence; }
-    public int getStopHeadsign() { return this.stopHeadsign; }
-    public int getPickupType() { return this.pickupType; }
-    public int getDropOffType() { return this.dropOffType; }
-    public double getShapeDistTraveled() { return this.shapeDistTraveled; }
-    public int getTimepoint() { return this.timepoint; }
+    public String getTripId() { return tripId; }
+    public String getArrivalTime() { return arrivalTime; }
+    public String getDepartureTime() { return departureTime; }
+    public String getStopId() { return stopId; }
+    public int getStopSequence() { return stopSequence; }
+    public int getStopHeadsign() { return stopHeadsign; }
+    public int getPickupType() { return pickupType; }
+    public int getDropOffType() { return dropOffType; }
+    public double getShapeDistTraveled() { return shapeDistTraveled; }
+    public int getTimepoint() { return timepoint; }
 }

@@ -1,6 +1,9 @@
 import java.io.*;
 import java.util.*;
 
+/**
+ * Parses stop_times.csv and organizes stop times by trip_id.
+ */
 public class Stop_timesLoader {
     private final Map<String, List<Stop_times>> stop_times = new HashMap<>();
 
@@ -15,26 +18,25 @@ public class Stop_timesLoader {
                     continue;
                 }
 
-                String[] parts = line.split(",");
+                String[] parts = line.split(",", -1); // preserve empty fields
                 if (parts.length >= 10) {
                     String tripId = parts[0];
                     String arrivalTime = parts[1];
                     String departureTime = parts[2];
                     String stopId = parts[3];
-                    int stopSequence = Integer.parseInt(parts[4]);
-                    int stopHeadsign = Integer.parseInt(parts[5]);
-                    int pickupType = Integer.parseInt(parts[6]);
-                    int dropOffType = Integer.parseInt(parts[7]);
-                    double shapeDistTraveled = Double.parseDouble(parts[8]);
-                    int timepoint = Integer.parseInt(parts[9]);
+                    int stopSequence = parseIntSafe(parts[4]);
+                    int stopHeadsign = parseIntSafe(parts[5]);
+                    int pickupType = parseIntSafe(parts[6]);
+                    int dropOffType = parseIntSafe(parts[7]);
+                    double shapeDistTraveled = parseDoubleSafe(parts[8]);
+                    int timepoint = parseIntSafe(parts[9]);
 
-                    Stop_times stop_time = new Stop_times(tripId, arrivalTime, departureTime, stopId, stopSequence,
+                    Stop_times stopTime = new Stop_times(tripId, arrivalTime, departureTime, stopId, stopSequence,
                             stopHeadsign, pickupType, dropOffType, shapeDistTraveled, timepoint);
-                    stop_times.computeIfAbsent(tripId, k -> new ArrayList<>()).add(stop_time);
+                    stop_times.computeIfAbsent(tripId, k -> new ArrayList<>()).add(stopTime);
                 }
             }
 
-            // Sort each trip's stop_times by stop sequence
             for (List<Stop_times> times : stop_times.values()) {
                 times.sort(Comparator.comparingInt(Stop_times::getStopSequence));
             }
@@ -42,6 +44,22 @@ public class Stop_timesLoader {
             System.out.println("Loaded " + stop_times.size() + " trips with stop times");
         } catch (IOException e) {
             System.err.println("Error loading stop_times: " + e.getMessage());
+        }
+    }
+
+    private int parseIntSafe(String value) {
+        try {
+            return Integer.parseInt(value.trim());
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    private double parseDoubleSafe(String value) {
+        try {
+            return Double.parseDouble(value.trim());
+        } catch (Exception e) {
+            return -1.0;
         }
     }
 
