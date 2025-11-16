@@ -1,3 +1,4 @@
+
 import java.util.Scanner;
 
 public class Main {
@@ -175,5 +176,6 @@ public class Main {
                 System.out.println("Invalid command format.");
             }
         }
+        sc.close();
     }
 }

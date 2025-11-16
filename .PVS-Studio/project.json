@@ -4,14 +4,43 @@
       "name": "Guelph-Competition",
       "path": "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\",
       "sources": [
-        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\Main.java",
-        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\ShapePoint.java",
-        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\Route.java"
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\BusStops.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\CSV.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\Main.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\OverpassAPI.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\Route.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\RouteLoader.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\ShapeLoader.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\ShapePoint.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\Stop.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\StopLoader.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\Stop_times.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\Stop_timesLoader.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\Trip.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\TripLoader.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\BusStops.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\CSV.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\Main.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\OverpassAPI.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\Route.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\RouteLoader.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\ShapeLoader.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\ShapePoint.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\Stop.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\StopLoader.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\Stop_times.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\Stop_timesLoader.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\Trip.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\src\\main\\java\\TripLoader.java",
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\target\\"
       ],
       "testSources": [],
-      "generatedSources": [],
+      "generatedSources": [
+        "c:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\target\\"
+      ],
       "classpath": [
-        "C:\\Users\\Sebastian\\AppData\\Roaming\\Code\\User\\workspaceStorage\\cde1e2007ee1c4be6b2505d07165ccd5\\redhat.java\\jdt_ws\\Guelph-Competition_b23e0cb8\\bin"
+        "C:\\UniversityCStuff\\GEC 2025 Competition\\GEC 2025 Competition Code\\Guelph-Competition\\target\\classes",
+        "C:\\Users\\Sebastian\\.m2\\repository\\org\\json\\json\\20231013\\json-20231013.jar"
       ]
     }
   ]

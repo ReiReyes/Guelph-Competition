@@ -1,3 +1,4 @@
+
 public class Trip {
     private String routeId;
     private String serviceId;

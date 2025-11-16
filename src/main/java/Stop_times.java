@@ -1,3 +1,4 @@
+
 public class Stop_times {
     private String tripId;
     private String arrivalTime;

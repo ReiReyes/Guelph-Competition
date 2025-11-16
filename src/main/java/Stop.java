@@ -1,3 +1,4 @@
+
 public class Stop {
     private String stopId;
     private String stopCode;

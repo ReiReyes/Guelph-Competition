@@ -1,3 +1,4 @@
+
 public class ShapePoint {
     private String shapeId;
     private double lat;
