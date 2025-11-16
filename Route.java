@@ -1,28 +1,34 @@
 public class Route {
-    private String id;
+    private String routeId;
+    private String agencyId;
     private String shortName;
     private String longName;
-    private String color;
+    private String description;
+    private int routeType;
+    private String routeUrl;
+    private String routeColor;
+    private String textColor;
 
-    public Route(String id, String shortName, String longName, String color) {
-        this.id = id;
+    public Route(String routeId, String agencyId, String shortName, String longName,
+                 String description, int routeType, String routeUrl, String routeColor, String textColor) {
+        this.routeId = routeId;
+        this.agencyId = agencyId;
         this.shortName = shortName;
         this.longName = longName;
-        this.color = color;
+        this.description = description;
+        this.routeType = routeType;
+        this.routeUrl = routeUrl;
+        this.routeColor = routeColor;
+        this.textColor = textColor;
     }
 
-    public String getId() { return id; }
+    public String getRouteId() { return routeId; }
+    public String getAgencyId() { return agencyId; }
     public String getShortName() { return shortName; }
     public String getLongName() { return longName; }
-    public String getColor() { return color; }
-
-    @Override
-    public String toString() {
-        return "Route{" +
-               "id='" + id + '\'' +
-               ", shortName='" + shortName + '\'' +
-               ", longName='" + longName + '\'' +
-               ", color='" + color + '\'' +
-               '}';
-    }
+    public String getDescription() { return description; }
+    public int getRouteType() { return routeType; }
+    public String getRouteUrl() { return routeUrl; }
+    public String getRouteColor() { return routeColor; }
+    public String getTextColor() { return textColor; }
 }
