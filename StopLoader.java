@@ -1,8 +1,12 @@
 import java.io.*;
 import java.util.*;
 
-public class StopsLoader {
-    private final Map<String, List<Stops>> stops = new HashMap<>();
+/**
+ * Parses stops.csv and stores Stop objects by stop_id.
+ */
+public class StopLoader {
+    private final Map<String, Stop> stops = new HashMap<>();
+
     public void loadStops(String filename) {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
@@ -14,17 +18,17 @@ public class StopsLoader {
                     continue;
                 }
 
-                String[] parts = line.split(",");
+                String[] parts = line.split(",", -1); // preserve empty fields
                 if (parts.length >= 6) {
                     String stopId = parts[0];
                     String stopCode = parts[1];
                     String stopName = parts[2];
                     String stopDesc = parts[3];
-                    double stopLat = Double.parseDouble(parts[4]);
-                    double stopLon = Double.parseDouble(parts[5]);
+                    double stopLat = parseDoubleSafe(parts[4]);
+                    double stopLon = parseDoubleSafe(parts[5]);
 
-                    Stops stop = new Stops(stopId, stopCode, stopName, stopDesc, stopLat, stopLon);
-                    stops.computeIfAbsent(stopId, k -> new ArrayList<>()).add(stop);
+                    Stop stop = new Stop(stopId, stopCode, stopName, stopDesc, stopLat, stopLon);
+                    stops.put(stopId, stop);
                 }
             }
 
@@ -34,11 +38,19 @@ public class StopsLoader {
         }
     }
 
-    public List<Stops> getStops(String stopId) {
-        return stops.getOrDefault(stopId, Collections.emptyList());
+    private double parseDoubleSafe(String value) {
+        try {
+            return Double.parseDouble(value.trim());
+        } catch (Exception e) {
+            return -1.0;
+        }
     }
 
-    public Map<String, List<Stops>> getAllStops() {
+    public Stop getStop(String stopId) {
+        return stops.get(stopId);
+    }
+
+    public Map<String, Stop> getAllStops() {
         return stops;
     }
 }

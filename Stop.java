@@ -1,13 +1,12 @@
-public class Stops {
+public class Stop {
     private String stopId;
     private String stopCode;
     private String stopName;
     private String stopDesc;
     private double stopLat;
     private double stopLon;
-    
 
-    public Stops(String stopId, String stopCode, String stopName, String stopDesc, double stopLat, double stopLon) {
+    public Stop(String stopId, String stopCode, String stopName, String stopDesc, double stopLat, double stopLon) {
         this.stopId = stopId;
         this.stopCode = stopCode;
         this.stopName = stopName;
