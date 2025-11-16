@@ -1,0 +1,29 @@
+<osm version="0.6" generator="openstreetmap-cgimap 2.1.0 (3893114 spike-07.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+<relation id="7486148" visible="true" version="16" changeset="162426428" timestamp="2025-02-12T11:38:24Z" user="PulisakZ" uid="9026132">
+<member type="way" ref="1359305379" role="outer"/>
+<member type="way" ref="516714078" role="outer"/>
+<member type="way" ref="1359305383" role="outer"/>
+<member type="way" ref="1352836571" role="outer"/>
+<member type="way" ref="1359283317" role="outer"/>
+<member type="way" ref="1359283315" role="outer"/>
+<member type="way" ref="1359278159" role="outer"/>
+<member type="way" ref="1359278158" role="outer"/>
+<member type="way" ref="1359278167" role="outer"/>
+<member type="way" ref="516714081" role="outer"/>
+<member type="way" ref="1359278166" role="outer"/>
+<member type="way" ref="1359301290" role="outer"/>
+<member type="way" ref="1352836570" role="outer"/>
+<member type="node" ref="36576733" role="label"/>
+<tag k="admin_level" v="6"/>
+<tag k="boundary" v="administrative"/>
+<tag k="name" v="Guelph"/>
+<tag k="official_name" v="City of Guelph"/>
+<tag k="place" v="city"/>
+<tag k="population" v="131794"/>
+<tag k="population:date" v="2016"/>
+<tag k="type" v="boundary"/>
+<tag k="website" v="https://guelph.ca/"/>
+<tag k="wikidata" v="Q504114"/>
+<tag k="wikipedia" v="en:Guelph"/>
+</relation>
+</osm>
