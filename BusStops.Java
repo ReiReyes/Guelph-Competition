@@ -19,9 +19,9 @@ public class BusStops {
      * Load routes and stops data from CSV files
      */
     private void loadData() {
-        loadRoutes("routes.csv");
-        loadStops("stops.csv");
-        loadStopTimes("stop_times.csv");
+        loadRoutes(".csv files/routes.csv");
+        loadStops(".csv files/stops.csv");
+        loadStopTimes(".csv files/stop_times.csv");
     }
     
     /**
