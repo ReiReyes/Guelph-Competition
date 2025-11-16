@@ -8,28 +8,21 @@ public class Main {
 
         System.out.println("\n=== RUNNING ALL TESTS ===\n");
 
-        // 1️⃣ --- Quick manual tests ---
         quickManualTests(simulator);
 
-        // 2️⃣ --- Loop time tests ---
         loopTimeTests(simulator);
 
-        // 3️⃣ --- Multiple route tests ---
         loopRouteTests(simulator);
 
-        // 4️⃣ --- Multiple nearby-stop tests ---
+    
         loopNearbyStopTests(simulator);
 
-        // 5️⃣ --- Scenario presets ---
         scenarioTests(simulator);
 
-        // 6️⃣ --- Interactive console ---
         interactiveConsole(simulator);
     }
 
-    // ============================================================
-    // 1️⃣ QUICK MANUAL TESTS
-    // ============================================================
+
 
     private static void quickManualTests(BusStops sim) {
         System.out.println("\n--- QUICK MANUAL TESTS ---");
@@ -44,10 +37,6 @@ public class Main {
         sim.showNearbyStops(43.545, -80.245, 0.5);
     }
 
-    // ============================================================
-    // 2️⃣ LOOP TIME TESTING
-    // ============================================================
-
     private static void loopTimeTests(BusStops sim) {
         System.out.println("\n--- TIME LOOP TESTS ---");
 
@@ -60,10 +49,6 @@ public class Main {
             sim.simulateAtTime(t);
         }
     }
-
-    // ============================================================
-    // 3️⃣ ROUTE TESTING
-    // ============================================================
 
     private static void loopRouteTests(BusStops sim) {
         System.out.println("\n--- ROUTE LOOP TESTS ---");
