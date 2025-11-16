@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Guelph Boundary – GEC 2025</title>
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    />
+
+    <!-- Our styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Guelph Boundary</h1>
+        <p>Data from OpenStreetMap / Overpass API</p>
+        <p class="subtitle">Built for GEC 2025 – Sebastian</p>
+    </header>
+
+    <main>
+        <section class="info">
+            <p>
+                This map shows the official administrative boundary of
+                <strong>Guelph</strong>, fetched live from OpenStreetMap
+                using the <strong>Overpass API</strong>.
+            </p>
+            <p>
+                Zoom, pan, and inspect the outline. The blue polygon is the boundary.
+            </p>
+        </section>
+
+        <!-- Map container -->
+        <div id="map"></div>
+
+        <section class="status">
+            <p id="status">Loading boundary from Overpass…</p>
+        </section>
+    </main>
+
+    <!-- Leaflet JS -->
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin="">
+    </script>
+
+    <!-- Our JavaScript -->
+    <script src="map.js"></script>
+</body>
+</html>
